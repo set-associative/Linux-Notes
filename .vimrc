@@ -1,29 +1,13 @@
-Skip to content
- 
-Search…
-All gists
-Back to GitHub
-Sign in
-Sign up
-Instantly share code, notes, and snippets.
-
-@kitchen
-kitchen/.vimrc
-Created 10 years ago
-0
-0
-Code
-Revisions
-1
-<script src="https://gist.github.com/kitchen/3753325.js"></script>
-my .vimrc
-.vimrc
-" shut off the old vi compatibility garboo!
 set nocompatible
-set encoding=utf-8
+colo torte
+syntax on
+set tabstop     =2
+set softtabstop =2
+set shiftwidth  =2
+set expandtab
+set number
 
-" show the current file position and percentage in the status bar
-set ruler
+
 
 " does some fun tab completion stuffs when in command mode
 set wildmenu
@@ -79,13 +63,6 @@ let g:Powerline_stl_path_style = "short"
 
 nnoremap <F5> :GundoToggle<CR>
 
-
-" pathogen
-call pathogen#infect()
-filetype on
-filetype indent on
-filetype plugin on
-
 " enable syntax highlighting
 syntax enable
 " go all the way back for redrawing. in case we're ass deep in nested ifs
@@ -106,31 +83,11 @@ let snips_author='Jeremy Kitchen'
 " colors!
 let g:solarized_visibility="normal"
 set background=dark
-color solarized
-"color blackboard
-
-
-" make it so emails wrap at 72 chars
-au FileType mail set tw=72 spell spelllang=en_us
-au FileType ruby,puppet,php setlocal ts=8 softtabstop=4 shiftwidth=4 expandtab
-au FileType markdown set spell spelllang=en_us
-au BufRead,BufNewFile *.md set filetype=markdown
-
 
 " wrap lines
 set wrap
 " I like these options better
 set formatoptions=qrn1
-
-" be a dick to myself and disable the arrow keys. gods be damned!
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
 
 " I'm not sure the difference here, but I'm like to find out
 nnoremap j gj
@@ -187,28 +144,6 @@ set wildignore+=*.pyc,*.beam
 "" iso 8601 date format
 let g:task_paper_date_format = "%Y-%m-%dT%H:%M:%S%z"
 let g:task_paper_search_hide_done = 1
-
-" svn stuffs
-"" quick svn blame snippet
-vmap gl :<C-U>!svn blame <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
- to join this conversation on GitHub. Already have an account? Sign in to comment
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-
-
-
 
 " shortcut to trigger Esc key
 inoremap jh <Esc>
