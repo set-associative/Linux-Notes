@@ -1,266 +1,354 @@
 1. 基础命令： cd, pwd, ls, whoami, hostname
 
 2. 默认fedora没有设置root用户，因此无法使用`sudo -`切换到root用户，
-但是可以曲线救国，使用`sudo -i`
+    但是可以曲线救国，使用`sudo -i`
 
-3. There are two paths to navigate a filesystem: 
-    absolute path, relative path
+3. There are two paths to navigate a filesystem:
+      absolute path, relative path
 
 4. directory listing attributes
-    a. 使用`ls -l' 可以查看 `Directory Listing Attributes',
-    b. atrributes依次为 Type, # of links, Owner, Group, Size, Month, Day, Time, Name
+      a. 使用`ls -l' 可以查看 `Directory Listing Attributes',
+      b. atrributes依次为 Type, # of links, Owner, Group, Size, Month, Day, Time, Name
 
 5. creating files and directories
-    a. touch, cp, vi可用于创建文件； mkdir用于创建文件夹；
-    b. `ls -ltr'为常用命令，按时间倒叙查看directory，
-    c. `mkdir -p'为常用命令，创建多级目录
+      a. touch, cp, vi可用于创建文件； mkdir用于创建文件夹；
+      b. `ls -ltr'为常用命令，按时间倒叙查看directory，
+      c. `mkdir -p'为常用命令，创建多级目录
 
-
-6. Linux File Type: -(Regular file), d（Directory）, l（link）, 
-                    c(special file or device file), s（socket）, 
-                    p（Named pipe）, b（Block device）
+6. Linux File Type: 
+      -(Regular file), d（Directory）, l（link）,
+      c(special file or device file), s（socket）,
+      p（Named pipe）, b（Block device）
 
 
 7. FIND FILES AND DIRECTORIES
-    a. find或者locate都可查找文件/文件夹；
-    b. 使用 `find / -name “clash”` 和 `locate "clash"`都是从根目录下
-    将所有名为clash的文件/文件夹找出来；
+      a. find或者locate都可查找文件/文件夹；
+      b. 使用 `find / -name “clash”` 和 `locate "clash"`都是从根目录下
+      将所有名为clash的文件/文件夹找出来；
 
 
 8. difference Beteen Find and locate
-    区别： locate是利用previously build database进行查找文件的，
-        而find是在实打实地在real system里搜寻，因此locate比find快，
-        但是如果数据库更新不及时（使用updatedb命令）， locate搜寻的结果不如find全面；
+      区别： locate是利用previously build database进行查找文件的，
+          而find是在实打实地在real system里搜寻，因此locate比find快，
+          但是如果数据库更新不及时（使用updatedb命令）， locate搜寻的结果不如find全面；
 
-    结论： 每次运行locate命令之前，应该先用updatedb命令更新数据库
+      结论： 每次运行locate命令之前，应该先用updatedb命令更新数据库
 
 9. changing password
-    直接passwd命令，然后傻瓜式操作
+      直接passwd命令，然后傻瓜式操作
 
 10. Wildcards
+      NOTE： regex和wildcard有些地方相似，但绝对不是一个东西，注意区分
 
-    NOTE： regex和wildcard有些地方相似，但绝对不是一个东西，注意区分
-
-    `*` - represents zero or more characters (regex中的*被称为a repeater symbol, 它是对前置字符进行n次重复)
-    `?` - represents a single character (regex中的？是对前置字符进行0或1次重复)
-    `[]` - represents a range of character 
-    `\` - an escape character
-    '^' - the beginning of the line
-    '$' - the end of the line
-    用法：
-        `touch abc{1..9}-xyz` 快速创建9个文件；
-        `ls -ltr abc?-xyz' 列出这9个文件
-        `rm abc?-xyz'将这九个文件删除
+      `*` - represents zero or more characters (regex中的*被称为a repeater symbol, 它是对前置字符进行n次重复)
+      `?` - represents a single character (regex中的？是对前置字符进行0或1次重复)
+      `[]` - represents a range of character
+      `\` - an escape character
+      '^' - the beginning of the line
+      '$' - the end of the line
+      用法：
+          `touch abc{1..9}-xyz` 快速创建9个文件；
+          `ls -ltr abc?-xyz' 列出这9个文件
+          `rm abc?-xyz'将这九个文件删除
 
 11. Soft and hard links
-    a. inode - Pointer or number of a file on the hard disk
-    b. Soft Link - 如果文件被删除或者改名或者移动，那么软链接就会失效
-    c. Hard Link - deleting renaming or moving the original file will not affect the hard link.
-    d. 原理：
-            my-hard-link -> inode;
-            my-soft-link -> myfile.txt -> inode;
-    e. 用法：
-        `ln file` 创建hard Link；
-        `ln -s file` 创建soft link；
-        `ls -ltri` 查看inodes；
+      a. inode - Pointer or number of a file on the hard disk
+      b. Soft Link - 如果文件被删除或者改名或者移动，那么软链接就会失效
+      c. Hard Link - deleting renaming or moving the original file will not affect the hard link.
+      d. 原理：
+              my-hard-link -> inode;
+              my-soft-link -> myfile.txt -> inode;
+      e. 用法：
+          `ln file` 创建hard Link；
+          `ln -s file` 创建soft link；
+          `ls -ltri` 查看inodes；
 
 12. Commands syntax： command options arguments
 
 13. File and directory permissions
-    a. There are 3 type of permissinos: rwx
-    b. Each permission can be controlled at three levels:
-        u - user=yourself;
-        g - group=can be people in the same project;
-        o - other;
-    c. 查看权限使用`ls -l`
-    d. 更改权限使用`chmod`
-    e. chmod命令有两种写法:
-        形如`chmod uo-w file`;
-        形如`chmod 744 file`;
+      a. There are 3 type of permissinos: rwx
+      b. Each permission can be controlled at three levels:
+          u - user=yourself;
+          g - group=can be people in the same project;
+          o - other;
+      c. 查看权限使用`ls -l`
+      d. 更改权限使用`chmod`
+      e. chmod命令有两种写法:
+          形如`chmod uo-w file`;
+          形如`chmod 744 file`;
 
 14. File ownership
-    a. There are 2 owners of a file or directory:
-        user and group
-    b. Command to change file ownership:
-        chown and chgrp
-    c. Recursive ownership change option (Cascade)
-        -R, --recursive - change files and directories recursively
-    
-    d. 用法：   
-        `chown [owner] [file]`;
-        `chgrp [grop] file`
+      a. There are 2 owners of a file or directory:
+          user and group
+      b. Command to change file ownership:
+          chown and chgrp
+      c. Recursive ownership change option (Cascade)
+          -R, --recursive - change files and directories recursively
+
+      d. 用法：
+          `chown [owner] [file]`;
+          `chgrp [grop] file`
 
 15. Access control list
-    a. 虽然对文件/文件夹的permissoins划分了三个level - ugo, 
-        但这样的划分还是太粗糙了，如果我相对同一group的不同user进行限制，那该怎么办？这就是acl的用武之地了！
-    b. getfacl和setfacl命令中 facl是 file access lists的缩写
-    c. 用法：
-        `getfacl [filename | foldername]` 查看关于该文件/文件夹阿的acl；
-        `setfacl -m u:username:rwx /path/to/file` - 为某个user添加权限；
-        `setfacl -m g:groupname:rwx` -  为某个group添加权限；
-        `setfacl -x u:username /path/to/file` 移除一条acl entry；
-        `setfacl -b path/to/file` 除了 base entry之外的acl entries全部移除；
-    d. NOTE: Setting w permission with ACL does not allow to remove a file.
+      a. 虽然对文件/文件夹的permissoins划分了三个level - ugo,
+          但这样的划分还是太粗糙了，如果我相对同一group的不同user进行限制，那该怎么办？这就是acl的用武之地了！
+      b. getfacl和setfacl命令中 facl是 file access lists的缩写
+      c. 用法：
+          `getfacl [filename | foldername]` 查看关于该文件/文件夹阿的acl；
+          `setfacl -m u:username:rwx /path/to/file` - 为某个user添加权限；
+          `setfacl -m g:groupname:rwx` -  为某个group添加权限；
+          `setfacl -x u:username /path/to/file` 移除一条acl entry；
+          `setfacl -b path/to/file` 除了 base entry之外的acl entries全部移除；
+      d. NOTE: Setting w permission with ACL does not allow to remove a file.
 
 16. Help Commands
-    There are 3 types of help Commands
-    `whatis command`
-    `command --help`
-    `man command`
+      There are 3 types of help Commands
+      `whatis command`
+      `command --help`
+      `man command`
 
 17. Tab key自动补全，up arrow key返回上次运行的命令
 
-
 18. Simple ways to add text to file
-    a. vi/code 
-    b. Redirect command > or >>
-    c. echo > or >> 
+      a. vi/code
+      b. Redirect command > or >>
+      c. echo > or >>
 
 19. tee command
-    Usage: tee [OPTION]... [FILE]...
-    Copy standard input to each FILE, and also to standard output. 
-    (tee即T，一个输入，两个输出)
+      Usage: tee [OPTION]... [FILE]...
+      Copy standard input to each FILE, and also to standard output.
+      (tee即T，一个输入，两个输出)
 
-    -a, --append              append to the given FILEs, do not overwrite
-    
-    用例：
-        echo "Hello World" > file1.txt 
-        echo "Hello world" | tee file1.txt
-    
-        echo "Hello World" >> file2.txt 
-        echo "Hello World" | tee -a file2.txt 
+      -a, --append              append to the given FILEs, do not overwrite
 
-20. A pipe is used by the shell to connect the output of one 
-    command directly to the input of another command.
-    用例：
-    ls -ltr | tee listdir
+      用例：
+          echo "Hello World" > file1.txt
+          echo "Hello world" | tee file1.txt
+
+          echo "Hello World" >> file2.txt
+          echo "Hello World" | tee -a file2.txt
+
+20. A pipe is used by the shell to connect the output of one
+      command directly to the input of another command.
+      用例：
+      ls -ltr | tee listdir
 
 21. File Maintenance Commands
-    cp, rm, mv, mkdir, rmdir or rm -r,
-    chgrp, chown
+      cp, rm, mv, mkdir, rmdir or rm -r,
+      chgrp, chown
 
 22. File Display Command
-    cat, more, less, head, tail
-    more和less类似，less可以让你一次看一行，more是一次看一屏幕
-    head和tail默认都是打印10行，可以用 -n 来指定行数
+      cat, more, less, head, tail
+      more和less类似，less可以让你一次看一行，more是一次看一屏幕
+      head和tail默认都是打印10行，可以用 -n 来指定行数
 
 
 23. windows用使用`ipconfig`查看ip地址，而linux用的是`ifconfig`命令
 
 24. Filters / Text Processors Commands
-    overview:
-        a. cut
-        b. awk
-        c. grep, egrap
-        d. sort
-        e. uniq
-        f. wc
+      overview:
+          a. cut
+          b. awk
+          c. grep, egrap
+          d. sort
+          e. uniq
+          f. wc
 
 25. cut
-    论述：Cut is a command line utility taht allows you to cut parts of lines 
-    from specified files or piped data and print the result to standard output.
-    It can be used to cut parts of a line by delimiter, byte position, and character
+      论述：Cut is a command line utility taht allows you to cut parts of lines
+      from specified files or piped data and print the result to standard output.
+      It can be used to cut parts of a line by delimiter, byte position, and character
 
-    Usage: cut OPTION... [FILE]...
-    Mandatory arguments to long options are mandatory for short options too.
-    -c, --characters=LIST   select only these characters
-    -d, --delimiter=DELIM   use DELIM instead of TAB for field delimiter
-    -f, --fields=LIST       select only these fields;  also print any line
-                                that contains no delimiter character, unless
-                                the -s option is specified
+      Usage: cut OPTION... [FILE]...
+      Mandatory arguments to long options are mandatory for short options too.
+      -c, --characters=LIST   select only these characters
+      -d, --delimiter=DELIM   use DELIM instead of TAB for field delimiter
+      -f, --fields=LIST       select only these fields;  also print any line
+                                  that contains no delimiter character, unless
+                                  the -s option is specified
 
-     例子： 使用`cat /etc/passwd | cut -d: -f1`来列出all users;
-          使用`echo "Hello World" | cut -c1-5`获取前5个字符
+      例子： 使用`cat /etc/passwd | cut -d: -f1`来列出all users;
+            使用`echo "Hello World" | cut -c1-5`获取前5个字符
 
-26. awk 
+26. awk
+      (1). useful link: https://www.cs.drexel.edu/~kschmidt/CS265/Lectures/Awk/awk.pdf
 
-    (1). useful link: https://www.cs.drexel.edu/~kschmidt/CS265/Lectures/Awk/awk.pdf
+      (2). introduction
+          a. Works well with record-type data
+          b. Reads input file(s) a line (record) at a time
+          c. Parses each record into fields
+          d. Performs actions actions on each record that matches a given test (pattern)
+          e. Rich math and string libraries
 
-    (2). introduction
-        a. Works well with record-type data
-        b. Reads input file(s) a line (record) at a time
-        c. Parses each record into fields
-        d. Performs actions actions on each record that matches a given test (pattern)
-        e. Rich math and string libraries
+      (3). Processing Input
+          a. Input file(s) are read, a record at a time
+          b. Each line is checked agaginst each pattern (test)
+          c. For each pattern matches, corresponding actions are performed on that record
+      (4). Invocation
+          命令行形式：
+              awk '{print $3}' input.txt
+          awk脚本形式:
+              awk -f script.awk input.txt
 
-    (3). Processing Input
-        a. Input file(s) are read, a record at a time
-        b. Each line is checked agaginst each pattern (test)
-        c. For each pattern matches, corresponding actions are performed on that record
-    (4). Invocation 
-        命令行形式：
-            awk '{print $3}' input.txt 
-        awk脚本形式:
-            awk -f script.awk input.txt
+      (4). Form of an AWK Program
+          An AWK program is a sequence of function definitions
+          and one or more rules: `pattern {actions}`
+      (5). A pattern can describe a range: start, end (左右都是闭区间);
+          例子： NR==8, NR==165 # 表示8到165行
+      (6). Actions
+          Default action is to print entire record ($0)
+      (7). Some Build-in Variables
+          a. NF   Number of fields in current record
+          b. NR   Number of records read (so far)
+          c. FS Input field separator
+      (8). Fields
+          a. Fields are split over FS
+              By default, split over arbitrary whitespace
+              但是可以用-F optoin来显式指定 feild separator
 
-    (4). Form of an AWK Program
-        An AWK program is a sequence of function definitions 
-        and one or more rules: `pattern {actions}`
-    (5). A pattern can describe a range: start, end (左右都是闭区间);
-        例子： NR==8, NR==165 # 表示8到165行
-    (6). Actions 
-        Default action is to print entire record ($0)
-    (7). Some Build-in Variables
-        a. NF   Number of fields in current record 
-        b. NR   Number of records read (so far)
-        c. FS Input field separator
-    (8). Fields 
-        a. Fields are split over FS 
-            By default, split over arbitrary whitespace
-            但是可以用-F optoin来显式指定 feild separator
+          b. Fields are identified by $1, $2, ... $NF
+          c. NF holds the number of fields in the current record
+          d. $0 is the current record
+          例子：
+              {print $0} # print entire line
+              {print $1, $3} # print the first and third field of each record
 
-        b. Fields are identified by $1, $2, ... $NF
-        c. NF holds the number of fields in the current record 
-        d. $0 is the current record 
-        例子： 
-            {print $0} # print entire line
-            {print $1, $3} # print the first and third field of each record
-        
-27. grep & egrep 
+27. grep & egrep
+      (1). grep 即 global regular expression print
 
-    (1). grep 即 global regular expression print 
+      (2). grep  searches  for PATTERNS in each FILE.  PATTERNS is one or more patterns separated by newline characters,
+      and grep prints each line that matches a pattern.  Typically PATTERNS should be quoted when grep is used in a shell command.
 
-    (2). grep  searches  for PATTERNS in each FILE.  PATTERNS is one or more patterns separated by newline characters, 
-    and grep prints each line that matches a pattern.  Typically PATTERNS should be quoted when grep is used in a shell command.
+      (3). The  variant  programs  egrep and fgrep are the same as grep -E and grep -F, respectively.
+          These variants are deprecated, but are provided for backward compatibility.
 
-    (3). The  variant  programs  egrep and fgrep are the same as grep -E and grep -F, respectively.  
-        These variants are deprecated, but are provided for backward compatibility.
+      (4). 正则表达式可根据`man grep`中的‘REGULAR EXPRESSIONS部分’进行详细了解！
 
-    (4). 正则表达式可根据`man grep`中的‘REGULAR EXPRESSIONS部分’进行详细了解！
+      (5). Basic Regular Expressions VS Extended Regular Expressions:
+          In basic regular expressions the meta-characters ?, +, {, |, (, and ) lose their special meaning; instead use the backslashed versions \?, \+,
+          \{, \|, \(, and \)
 
-    (5). Basic Regular Expressions VS Extended Regular Expressions:
-        In basic regular expressions the meta-characters ?, +, {, |, (, and ) lose their special meaning; instead use the backslashed versions \?, \+,  \{,
-       \|, \(, and \).
-
-    (6). grep常用的options： -n, -i, -E, -v
+      (6). grep常用的options： -n, -i, -E, -v
 
 28. sort & uniq
-    在使用uniq命令之前，必须使用sort命令！
-
-    Sort by field number： `sort -k2 file` 
-    去重的同时列出count： `uniq -c`
+      在使用uniq命令之前，必须使用sort命令！
+      Sort by field number： `sort -k2 file`
+      去重的同时列出count： `uniq -c`
 
 29. word counter
-    `wc file` 相当于 `wc -lwc`, 依次列出行数，word数，byte数
-    `wc -m file` 列出字符数 (一个中文占3个字节)
+      `wc file` 相当于 `wc -lwc`, 依次列出行数，word数，byte数
+      `wc -m file` 列出字符数 (一个中文占3个字节)
 
-30. diff & cmp 
-    a. diff逐行比较， cmp逐字节比较
-    b. 使用`diff FILE1 FILE2`的输出结果中，带有'<'表示来自FILE1中的行， 带有'>'表示来自FILE2中的行
+30. diff & cmp
+      a. diff逐行比较， cmp逐字节比较
+      b. 使用`diff FILE1 FILE2`的输出结果中，带有'<'表示来自FILE1中的行， 带有'>'表示来自FILE2中的行
 
 31. Compress and Uncompress
-    a. tar 命令用于将多个文件整合到一个文件内
-    b. 执行完tar后，常常用gzip对该文件进行压缩
-    c. `gzip -d` 等同于 `gunzip`
-    Examples:
-    tar -cf archive.tar foo bar  # Create archive.tar from files foo and bar.
-    tar -tvf archive.tar         # List all files in archive.tar verbosely.
-    tar -xf archive.tar          # Extract all files from archive.tar.
- 
- 32. Truncate File Size 
-    `truncate -s SIZE FILE` # shrink or extend the size of a file to the specified size
+      a. tar 命令用于将多个文件整合到一个文件内
+      b. 执行完tar后，常常用gzip对该文件进行压缩
+      c. `gzip -d` 等同于 `gunzip`
+      Examples:
+      tar -cf archive.tar foo bar  # Create archive.tar from files foo and bar.
+      tar -tvf archive.tar         # List all files in archive.tar verbosely.
+      tar -xf archive.tar          # Extract all files from archive.tar.
+
+ 32. Truncate File Size
+      `truncate -s SIZE FILE` # shrink or extend the size of a file to the specified size
 
 33. Combining and Splitting Files
-    combining: `cat FILE1 FILE2 FILE3 > FILE4`
-    splitting: `split -l NUMBERS FILE childfile_prefix` # 将FILE中的内容按照行划分给子文件
+      combining: `cat FILE1 FILE2 FILE3 > FILE4`
+      splitting: `split -l NUMBERS FILE childfile_prefix` # 将FILE中的内容按照行划分给子文件
+
+34. sed command
+  useful link: 
+      https://edoras.sdsu.edu/doc/sed.html
+  sed的工作模式：
+      首先从input读取一行，针对这一行执行相应的命令(比如delete, substitute, print)，
+      如果有多个命令(需要用-e option指定)，按照定义的顺序依次执行，执行完
+      后，输出这一行到output file或screen，继续读取下一行...
+  在shell里使用sed命令：
+      sed 'restriction command' <oldfile>newfile
+      (restriction可以是a line numbers, a pattern或者range by numbers or range by regular expressions)
+  在vi/vim中使用（来自sed的）substitute命令:
+      :%s/PATTERN/PATTERN/flags
+
+
+35. backslash, single quotes, and double quotes
+    a. useful link：
+        https://www.grymoire.com/Unix/Quote.html
+
+    b. The single quotes are stronger than the double quotes.And the backslash is the strongest of all.
+    c. 被单引号引用的任何特殊字符和命令都会失效，但是被双引号引用的部分可以expend variables 和 进行expankcommand substitution；
+
+      % echo 'What the *heck* is a $ doing here???'
+      What the *heck* is a $ doing here???
+
+      % echo "Is your home directory $HOME?"
+      Is your home directory /home/barnett?
+
+      % echo "Your current directory is `pwd`"
+      Your current directory is /home/barnett
+      % echo "Your current directory is $(pwd)"
+      Your current directory is /home/barnett
+
+    c. backslash的另一种重要用法
+       % echo This coudl be \
+         a very long \
+         line !
+       %
+       This escapes or quotes the end of line character, so it no longer has a special meaning. 
+       In the above example, I also put a backslash before the exclamation point.
+
+36. User Account Management  
+      a. Commands
+          useradd 
+            `useradd <username>`
+            验证是否添加成功：
+              `id <username>`
+              `cat /etc/passwd | grep <groupname>`
+            用户创建成功后，查询/etc/shadow中是没有密码的，需要手动`passwd <username>`添加密码
+          groupadd
+            `groupadd <groupname>`
+            验证是否添加成功：
+            `cat /etc/group | grep <groupname>`
+
+          userdel
+          groupdel
+
+          usermod 
+          一个用户所属的group分为两种，a primary group 和secondary groups,
+          前者，可用-g 指定，后者可用-G指定；
+          在`id <username>`的输出信息中，gid对应primary group， gorups对应secondary groups
+          由于与secondary groups可有多个，为了删改一个用户所属的gorups，可以使用-aG, -rG, 或者直接-G
+
+      b. Files
+          /etc/passwd 存储users信息
+          /etc/group  存储groups信息
+          /etc/shadow 存储密码
+
+37. Switch Users and sudo Access 
+      useful link: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/managing-sudo-access_configuring-basic-system-settings
+
+      commands:
+        `su [-] <username>`
+        `sudo <command>`
+        `visudo` 用于编辑/etc/sudoers文件
+
+      FILES
+          /etc/sudo.conf            Sudo front-end configuration
+
+          /etc/sudoers              List of who can run what (属于authorization的范畴)
+
+          /etc/sudoers.tmp          Default temporary file used by visudo
+
+38. Monitor Users
+        who
+        w
+        finger
+        id
+
+39. Talking to Users
+      users
+      wall 相当于广播消息
+      write 针对特定user发消息
 
