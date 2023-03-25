@@ -142,6 +142,8 @@
       more和less类似，less可以让你一次看一行，more是一次看一屏幕
       head和tail默认都是打印10行，可以用 -n 来指定行数
 
+      `cat -vet <file>`可以更清晰地看出文件的文字结构
+
 
 23. windows用使用`ipconfig`查看ip地址，而linux用的是`ifconfig`命令
 
@@ -352,3 +354,173 @@
       wall 相当于广播消息
       write 针对特定user发消息
 
+40. System Utility Comands
+    a. `date`
+    b. `uptime` 这里的up理解为running
+    c. `hostname`
+    d. `uname -a` 展示系统相关的信息
+    e. `which`
+    f. `cal` 即calendar
+    g. `bc` 即binary calculator
+
+41. Process/Service Commands
+    a. systemctl or service
+      https://www.redhat.com/sysadmin/linux-systemctl-manage-services
+      reload VS restart:
+            restart = stop + start
+            reload = remain running + re-read configuration files
+      
+      * systemctl 取代了serveice命令，是用于管理system services的新工具
+      * Usage exaple:
+          systemctl start|stop|status servicename.service
+          systemctl list-unit --all
+      * To add a service under systemctl management:
+          Create a unit file in /etc/systemd/system/sericename.service
+      * systemctl也可用于开关机:
+          systemctl poweroff
+          systemctl halt
+          systemctl reboot
+
+    b. ps
+      ps即processes
+      `ps -ef`列出所有进程
+      `ps -u <username>` 列出由指定用户创建的进程
+
+    c. top
+      * top命令相当于windows的任务管理器
+      * `top -u <username>` ==  show tasks/process by user onwd
+      * top then press c    ==  show commands absolut path
+      * top then press k    ==  kill a process by PID
+      * top then M and P    ==  sort all running processes by memory usage
+
+    d. kill
+      `kill [-signal] [pid]` signal可以是name或number，默认是SIGTERM（15）
+      SIGTERM VS SIGKILL (`kill pid` VS `kill -9 pid`):
+        SIGTERM: gracefully kill the process;
+        SIGKILL: kill the process immediately;
+        只有对an unresponsive process才使用SIGKILL，否则首选SIGTERM；
+        使用SIGKILL可能会产生zombie process;
+    e. crontab or at
+      NOTE: 使用crontab之前，必须确保the cron daemon 正在运行
+      crontab中被安排的job会周期性地执行，而at中安排的job只会执行一次
+
+      useful links:
+      https://fedoramagazine.org/scheduling-tasks-with-cron/
+      https://linuxhandbook.com/crontab/
+      每个用户都有专属的crontab (cron table)，cron table中每一行为一个cron job，
+      每一个cron job定义了在特定的时间点做什么；
+      因此`crontab -e`对crontab编辑，从而实现自动化任务
+
+    bonus: jobs VS ps
+      useful link: https://unix.stackexchange.com/questions/4214/what-is-the-difference-between-a-job-and-a-process
+      job是手动启动的，比如运行`qq &`后，可以用`jobs -l`找到相应的job；
+
+      顺带一提，job和task是一个概念;
+
+42. Porcess Management
+    * 使用Ctrl+z (相当于SIGTSTP) 来temporarily stop进程后，bg，fg分别让该进程在background或foreground运行
+    * SIGHUP：https://unix.stackexchange.com/questions/15601/program-behavior-when-kill-hup-is-recieved
+    *  HUP 是 hang up的缩写
+    * PR = NI + 20, PR是指priority，用于进程调度，可以用`ni -n <NI> <pid>`来指定nice alue
+    * 使用Ctrl+c, 相当于SIGINT
+    * Run process even after the terminal was closed:
+        `nohup pid &`
+        或者
+        `nohup pid > /dev/null 2>&1 &` 
+    * 对于 2>&1 的解释: https://superuser.com/questions/436586/why-redirect-output-to-21-and-12
+
+43. System Monitoring
+    `df -h`
+      df （disk free）查看disk上各分区被挂载的文件系统的使用情况, 常常带上-h，来使得输出hunman-readable
+      https://docs.fedoraproject.org/en-US/fedora/f36/install-guide/appendixes/Disk_Partitions/
+
+    `du -sh <dir>`
+      du (disk usage)可以查看文件夹的size，-h使结果hunman-readable, -s表示总结
+      https://www.redhat.com/sysadmin/du-vs-df
+
+    `dmesg | more`
+      输出kernel ring buffer信息，一般用于troubleshooting，详情https://www.redhat.com/sysadmin/dmesg
+
+    `iostat`
+      按照分区和设备来展示CPU I/O的statistic, 在进行错误排查时常用`iostat -m 1`来以秒为间隔(interval)动态地查看
+      详情https://www.redhat.com/sysadmin/io-reporting-linux
+
+    `netstat`
+      netstat可用于port listening, 该命令默认输出会很冗长，可以用-t, -u来分别只打印tcp连接和udp连接的端口
+      详情https://www.redhat.com/sysadmin/netstat
+
+    `free`
+      查看physical和swap memory的信息
+      swap memory详情https://web.mit.edu/rhel-doc/5/RHEL-5-manual/Deployment_Guide-en-US/ch-swapspace.html
+      virtual memory详情https://www.youtube.com/watch?v=2quKyPnUShQ&ab_channel=AndroidAuthority
+      free命令详情https://www.redhat.com/sysadmin/dissecting-free-command
+
+    `cat /proc/cupinfo` 查看cup信息
+    `cat /proc/meminfo` 查看memory信息
+
+44. Log Monitoring
+      useful link: https://docs.fedoraproject.org/en-US/fedora/latest/system-administrators-guide/monitoring-and-automation/Viewing_and_Managing_Log_Files/#Viewing_and_Managing_Log_Files.adoc#s1-Using_the_Journal
+
+45. System Maintenance Commonds
+      要进行poweroff， halt， reboot这三个操作有如下方法:
+        poweroff, halt, reboot 这三个本身就是可以直接使用的命令；
+        shutdown加上对应的参数;
+        systemctl加上对应的参数;
+        init命令加上对应的参数；
+      https://www.redhat.com/sysadmin/linux-boot-shutdown-systemd#:~:text=The%20shutdown%20command%20features%20two,option%20turns%20off%20the%20system.
+
+46. `hostnamectl set-hostname <newname>`永久更改主机名；
+    `hostname` 查看主机名；
+    如果使用`hsotname <newname>`， 只是暂时更改主机名，重启后就会变回来；
+    
+
+47. Finding System Information
+      * `hostnamectl`
+      * `cat /etc/redhat-release`
+      * `uname -a`, uname代表unix name
+      * `dmidecode`
+
+48.  使用systemctl命令或者arch命令都能查看system architecture
+    
+49. 在linux终端，以下快捷键应该掌握：
+      ctrl-e然后ctrl-u，删除自己在终端打得字
+      cltr-z暂停进程
+      ctlr-d从交互程序中退出
+
+50. capture terminal sessions and output with the Linux script command
+      `script <logfile>`
+      使用script命令会进入一个新的terminal session，在没有用exit命令退出之前，所有终端的output都会被记录到一个文件 （默认为 typescript） 
+      https://www.redhat.com/sysadmin/linux-script-command
+    
+51. Reset Root Password
+    https://docs.fedoraproject.org/en-US/quick-docs/reset-root-password/
+
+52. Environment Variables
+    `env` 查看所有的环境变量
+    `echo $PATH`查看特定的边境变量
+
+    `export <variable>=<value>`如果仅仅在终端执行， 改变仅仅是暂时的;
+    为了永久地改变该环境变量应该写入到:
+      针对当前用户: ~/.bashrc or ~/.profile
+      针对所有用户：/etc/bashrc or /etc/profile
+
+    改变环境变量后，需要重新加载配置文件，比如`source ~/.bashrc`
+
+53. 除了rwx这三种permissions之外，其实还有SUID (s), SGID (s), sticky (t)这三种权限;
+    /usr/bin/passwd它具有SUID权限，它的拥有着是root，因此你会作为root用户执行它，不论你传递什么参数；
+    SGID类似SUID；
+    sticky权限只对directory有效，它会对owner和root之外的用户进行限制，无法对该文件夹下的文件进行删除, 比如/tmp文件夹；
+
+54. stat - display file or file system status
+      `stat <file>` 显示file status
+      `stat -f <file>` 显示file system status
+55. lastlog命令会打印用户关于上次登陆的信息
+    `lastlog`默认打印所有用户，`lastlog -u <user>`可以打印特定用户
+
+56. echo默认不会解释backslash（转义字符的），除非使用-e
+    比如`echo -e "hello \n world"`才会达到想要的效果;
+
+57. 除了在setting处设置手动代理之外，终端也需要设置: https://gist.github.com/atmosmps/820967eb7ab393b0a183ca25ed380c8a
+    
+58. vim中的宏录制: https://learnbyexample.github.io/vim_reference/Macro.html
+    qq -> some commands -> q -> @q or 3@q  
